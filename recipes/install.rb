@@ -61,21 +61,32 @@ unless ::File.exist?'/opt/tomcat'
   end
 end
 
-# Install systemd unit file
-template '/etc/systemd/system/tomcat.service' do
-  source 'tomcat.service.erb'
-  owner 'root'
-  group 'root'
-  mode '0755'
-end
-
-# Reload systemd
-execute 'systemd_reload' do
-  command 'systemctl daemon-reload'
-  action :run
-end
-
-# Start and enable Tomcat
-service 'tomcat' do
-  action [:enable, :start]
+# Install systemd unit file, enable, and start the Tomcat service
+systemd_unit 'tomcat.service' do
+  content(Unit: {
+            Description: 'Apache Tomcat Web Application Container',
+            After: 'syslog.target network.target',
+          },
+          Service: {
+            Type: 'forking',
+            Environment: [
+              'JAVA_HOME=/usr/lib/jvm/jre',
+              'CATALINA_PID=/opt/tomcat/temp/tomcat.pid',
+              'CATALINA_HOME=/opt/tomcat',
+              'CATALINA_BASE=/opt/tomcat',
+              'CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC',
+              'JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom',
+            ],
+            ExecStart: '/opt/tomcat/bin/startup.sh',
+            ExecStop: '/bin/kill -15 $MAINPID',
+            User: 'tomcat',
+            Group: 'tomcat',
+            UMask: '0007',
+            RestartSec: '10',
+            Restart: 'always',
+          },
+          Install: {
+            WantedBy: 'multi-user.target',
+          })
+  action [:create, :enable, :start]
 end

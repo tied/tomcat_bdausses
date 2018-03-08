@@ -16,7 +16,7 @@ suites:
   - name: default
     run_list:
       - recipe[tomcat_bdausses::install]
-#    verifier:
-#      inspec_tests:
-#        - test/smoke/default
+    verifier:
+      inspec_tests:
+        - test/smoke/default
 #    attributes:
