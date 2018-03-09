@@ -1,0 +1,11 @@
+# Install git and chef-client
+sudo yum install -y git https://packages.chef.io/files/stable/chef/13.8.5/el/7/chef-13.8.5-1.el7.x86_64.rpm
+
+# Create a temporary cookbooks directory and switch to it
+mkdir /tmp/cookbooks && cd /tmp/cookbooks
+
+# Clone the source code repo
+git clone https://github.com/makemeasandwich/tomcat_bdausses.git
+
+# Run chef client in local-mode specifying the recipe
+sudo chef-client --local-mode -r tomcat_bdausses::install
