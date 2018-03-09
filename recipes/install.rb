@@ -5,11 +5,17 @@
 # Copyright:: 2018, The Authors, All Rights Reserved.
 
 # Verify RHEL based distro
-# raise if node['platform_family'] != 'rhel'
 unless node['platform_family'] == 'rhel'
   Chef::Log.fatal('This cookbook is intended for RHEL based distributions')
   Chef::Log.fatal("only, but this node is based on #{node[:platform_family]}.")
   Chef::Log.fatal('Exiting...')
+  raise
+end
+
+# Verify 64-bit based distro
+unless node['kernel']['machine'] == 'x86_64'
+  Chef::Log.fatal('This cookbook is intended for 64-bit distributions')
+  Chef::Log.fatal('only.  Exiting...')
   raise
 end
 

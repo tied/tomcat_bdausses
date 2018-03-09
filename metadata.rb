@@ -1,9 +1,9 @@
 name 'tomcat_bdausses'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
-license 'All Rights Reserved'
-description 'Installs/Configures tomcat_bdausses'
-long_description 'Installs/Configures tomcat_bdausses'
+maintainer 'Brad Dausses'
+maintainer_email 'brad.dausses@gmail.com'
+license 'Apache License, Version 2.0 '
+description 'Installs Tomcat'
+long_description 'Installs Tomcat'
 version '0.1.0'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
