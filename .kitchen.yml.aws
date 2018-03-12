@@ -1,0 +1,29 @@
+---
+driver:
+  name: ec2
+  aws_ssh_key_id: test-kitchen
+  security_group_ids: ["sg-d6cf18a0","sg-8c2be2fa","sg-75971603"]
+  region: us-east-1
+  require_chef_omnibus: true
+  instance_type: t2.micro
+  associate_public_ip: true
+  interface: dns
+
+transport:
+  ssh_key: ~/.aws/test-kitchen.pem
+  connection_timeout: 10
+  connection_retries: 5
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: rhel-7
+
+suites:
+  - name: default
+    run_list:
+      - recipe[tomcat_bdausses::install]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
